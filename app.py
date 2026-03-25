@@ -6,7 +6,7 @@ import random
 st.set_page_config(page_title="5학년 질문 회의 생성기", layout="centered")
 
 # 2. API 키 설정 (Secrets에서 가져오기)
-api_key = st.secrets.get("gemini_api_key")
+api_key = st.secrets.get("AIzaSyC7cIyLGPan-7M-WsFzsxE-fSOVOL8IFxw")
 
 # 3. CSS 스타일 정의 (색상 및 디자인)
 st.markdown("""
