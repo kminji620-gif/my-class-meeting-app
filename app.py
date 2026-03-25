@@ -39,7 +39,7 @@ try:
     genai.configure(api_key=api_key)
     
     # 가장 범용적이고 안정적인 모델명을 순서대로 시도합니다.
-    model_name = 'gemini-1.5-flash' 
+    model_name = 'models/gemini-1.5-flash' 
     
     # 생성 모델 설정
     model = genai.GenerativeModel(
