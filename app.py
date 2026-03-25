@@ -28,7 +28,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-flash-latest')
 
-RECOMMENDED_TOPICS = ["급식실 잔반 줄이기", "현장체험학습 장소 정하기", "복도 우측통행 규칙", "학급 장기자랑 종목 정하기"]
+RECOMMENDED_TOPICS = ["급식실 잔반 줄이기", "학교 축제 부스 운영", "복도 우측통행 규칙", "학급 다모임 활동 정하기", "학급 장기자랑 종목 정하기"]
 
 st.title("🏫 5학년 질문 회의 대본 생성기")
 with st.sidebar:
@@ -56,7 +56,7 @@ if st.button("🚀 대본 생성하기", use_container_width=True):
     else:
         with st.spinner("AI가 대본을 작성 중..."):
             try:
-                prompt = f"초등 5학년 회의 대본. 주제: {topic}, 인원: {count}명. 서로 존댓말 사용. [의도 파악], [의미 명료화], [대안 탐색] 질문을 대사 앞에 포함할 것. '이름: [질문유형] 대사' 형식으로 써줘."
+                prompt = f"초등 5학년 회의 대본. 주제: {topic}, 인원: {count}명. **반드시 등장인물의 이름을 '사회자', '학생 1', '학생 2', '학생 3' 등으로만 표기해줘. 실제 사람 이름을 쓰지 마.** 서로 존댓말 사용. [의도 파악], [의미 명료화], [대안 탐색] 질문을 대사 앞에 포함할 것. '이름: [질문유형] 대사' 형식으로 써줘."
                 response = model.generate_content(prompt)
                 full_html = '<div class="script-box">'
                 for line in response.text.split('\n'):
