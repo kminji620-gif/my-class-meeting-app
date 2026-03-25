@@ -37,9 +37,23 @@ if not api_key:
 
 try:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    
+    # 가장 범용적이고 안정적인 모델명을 순서대로 시도합니다.
+    model_name = 'gemini-1.5-flash' 
+    
+    # 생성 모델 설정
+    model = genai.GenerativeModel(
+        model_name=model_name,
+        generation_config={
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 2048,
+        }
+    )
+    # 테스트 호출 (연결 확인용)
+    # response = model.generate_content("test") # 필요시 주석 해제
 except Exception as e:
-    st.error(f"API 연결 오류: {e}")
+    st.error(f"⚠️ 모델 연결에 문제가 생겼습니다. API 키를 다시 확인하거나 잠시 후 시도해주세요. 에러내용: {e}")
     st.stop()
 
 RECOMMENDED_TOPICS = ["급식실 잔반 줄이기", "현장체험학습 장소 정하기", "복도 우측통행 규칙", "학급 장기자랑 종목 정하기"]
