@@ -1,0 +1,69 @@
+import streamlit as st
+import google.generativeai as genai
+import random
+
+# 1. API 키 설정 (보안을 위해 실제 운영 시에는 secrets를 사용하세요)
+# AIzaSyBSBDqkQ4i8kiQMQm9PtqCPpQL35zWNphw
+GENAI_API_KEY = "YOUR_GEMINI_API_KEY"
+genai.configure(api_key=GENAI_API_KEY)
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+# 2. 추천 주제 리스트
+RECOMMENDED_TOPICS = [
+    "급식실 잔반을 줄이기 위한 실천 방안",
+    "현장체험학습 장소 결정하기 (박물관 vs 테마파크)",
+    "복도 우측통행을 즐겁게 실천하는 방법",
+    "학급 장기자랑의 종목과 순서 정하기",
+    "스마트폰 사용 시간을 줄이는 우리만의 약속",
+    "쉬는 시간 교실 놀이 기구 사용 규칙"
+]
+
+# 3. UI 구성
+st.set_page_config(page_title="5학년 질문 회의 대본 생성기", layout="centered")
+
+st.title("🏫 5학년 질문 회의 대본 생성기")
+st.write("상대의 말을 듣고 질문하며 해결책을 찾아가는 민주적 회의 연습 도구입니다.")
+
+# 사이드바 설정
+with st.sidebar:
+    st.header("⚙️ 설정")
+    if st.button("💡 주제 추천받기"):
+        st.session_state.topic_input = random.choice(RECOMMENDED_TOPICS)
+    
+    topic = st.text_input("회의 주제", 
+                         value=st.session_state.get('topic_input', ''),
+                         placeholder="주제를 입력하세요.")
+    
+    count = st.slider("참여 인원 (사회자 포함)", 3, 24, 4)
+    st.info("3~6명은 모둠용, 24명은 학급 전체용 대본으로 생성됩니다.")
+
+# 4. 대본 생성 로직
+if st.button("🚀 대본 생성하기", use_container_width=True):
+    if not topic:
+        st.warning("먼저 주제를 입력하거나 추천을 받아보세요!")
+    else:
+        with st.spinner("5학년 수준의 맞춤형 대본을 작성 중입니다..."):
+            prompt = f"""
+            너는 초등학교 5학년 수준의 회의 대본을 작성하는 전문가야.
+            아래 조건에 맞춰서 자연스러운 구어체 대본을 써줘.
+
+            [조건]
+            1. 주제: {topic}
+            2. 인원: {count}명 (각자 이름은 '학생1', '학생2' 등으로 표시)
+            3. 문체: 학생들끼리 서로 존댓말(경어체)을 사용하며 존중하는 분위기.
+            4. 필수 포함 사항:
+               - 단순히 의견만 말하는 게 아니라, 반드시 앞 사람의 말을 '경청'하고 있음을 나타내는 반응을 넣을 것.
+               - 다음 3가지 질문 유형이 대본 전반에 골고루, 많이 포함되도록 할 것:
+                 ① 발화자의 의도를 파악하기 위한 질문 (예: "~라는 마음으로 하신 말씀인가요?")
+                 ② 의미를 명료하게 하기 위한 질문 (예: "~라는 게 정확히 어떤 뜻인지 알려줄 수 있나요?")
+                 ③ 대안이나 정보를 찾기 위한 질문 (예: "만약 ~한다면 어떻게 하면 좋을까요?")
+            5. 대본 중간에 해당 질문이 어떤 유형인지 [의도 파악], [의미 명료화], [대안 탐색]이라고 표시해줘.
+            6. 마지막은 사회자가 의견을 정리하며 훈훈하게 마무리할 것.
+            """
+            
+            response = model.generate_content(prompt)
+            st.markdown("---")
+            st.markdown(response.text)
+            
+            # 다운로드 버튼 제공
+            st.download_button("📂 대본 파일로 저장하기", response.text, file_name=f"회의대본_{topic}.txt")
