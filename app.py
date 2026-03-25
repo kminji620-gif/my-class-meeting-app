@@ -26,7 +26,7 @@ if not api_key:
 
 # 모델 설정 (안정적인 버전)
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-pro')
 
 RECOMMENDED_TOPICS = ["급식실 잔반 줄이기", "현장체험학습 장소 정하기", "복도 우측통행 규칙", "학급 장기자랑 종목 정하기"]
 
