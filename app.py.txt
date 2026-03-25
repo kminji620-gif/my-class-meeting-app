@@ -3,7 +3,7 @@ import google.generativeai as genai
 import random
 
 # 1. API 키 설정 (보안을 위해 실제 운영 시에는 secrets를 사용하세요)
-# AIzaSyBSBDqkQ4i8kiQMQm9PtqCPpQL35zWNphw
+# genai.configure(api_key=st.secrets["AIzaSyBSBDqkQ4i8kiQMQm9PtqCPpQL35zWNphw"])
 GENAI_API_KEY = "YOUR_GEMINI_API_KEY"
 genai.configure(api_key=GENAI_API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
